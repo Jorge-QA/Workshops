@@ -12,5 +12,22 @@ body{
 }
 .principal{
     margin-top: 10rem;
+    background: rgb(116, 238, 250);
+    width: 40rem;
+    height: 25rem;
+    margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 50px;
+    border: solid 10px black;
+}
+
+.select{
+    margin-right: 65%;
+    margin-top: 1rem;
+    width: 200px;
 }
 

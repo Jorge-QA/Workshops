@@ -23,7 +23,6 @@ app.get('/tipocambio', function (req, res) {
 app.get("/countries", function (req, res) {
   res.json({
     "countries" : [
-      { "name": "Afganistán", "currency": "AFN" },
       { "name": "Albania", "currency": "ALL" },
       { "name": "Argelia", "currency": "DZD" },
       { "name": "Andorra", "currency": "EUR" },
