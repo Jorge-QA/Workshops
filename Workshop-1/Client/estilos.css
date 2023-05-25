@@ -1,0 +1,16 @@
+body{
+    width: 960px; /* Ancho deseado */
+    margin: 0 auto;
+    display: contents;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    text-align: center;
+    
+}
+.principal{
+    margin-top: 10rem;
+}
+

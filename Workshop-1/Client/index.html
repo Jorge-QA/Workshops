@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web api of countries</title>
+    <link rel="stylesheet" href="estilos.css" />
+    <!-- <script>
+        const completed = (e) => {
+          const data = JSON.parse(e.target.responseText);
+          document.getElementById('result').innerHTML = `Tipo de Cambio Dolares ${data.TipoCompraDolares}`;
+        };
+    
+        const error = () => console.log(this.responseText);
+    
+        function getExchange() {
+          const ajaxRequest = new XMLHttpRequest(); //AJAX
+          ajaxRequest.addEventListener("load", completed);
+          ajaxRequest.addEventListener("error", error);
+          ajaxRequest.open("GET", "http://localhost:3000/tipocambio");
+          ajaxRequest.send();
+        }
+      </script> -->
+  </head>
+  <body>
+    <div class="principal">
+      <!-- <button onclick="getExchange();">Tipo de Cambio</button>
+    <h3>Results:</h3>
+    <div id="result"></div> -->
+
+      <select
+        onchange="getExchange();"
+        name="countries"
+        id="countries"
+      ></select>
+      <br />
+      <br />
+
+      <div>Exchange rate equivalence:</div>
+      <br />
+      <br />
+      <div>
+        USD:
+        <h2><span id="dollarExchange"></span></h2>
+      </div>
+      <br />
+      <br />
+      <div>
+        EUR:
+        <h2><span id="euroExchange"></span></h2>
+      </div>
+      <script>
+        const ajaxRequest = new XMLHttpRequest(); //AJAX
+        ajaxRequest.addEventListener("load", (e) => {
+          const count = JSON.parse(e.target.responseText);
+          //se declara otra variable ya que el json trae un objeto grande
+          const countries = count.countries;
+          //acá ordenamos por orden alfabetico
+          countries.sort((x, y) => x.name.localeCompare(y.name));
+          let optionsHtml = "";
+          countries.forEach((country) => {
+            //console.log(country.name);
+            optionsHtml += `<option value="${country.currency}">${country.name}</option>`;
+          });
+          document.getElementById("countries").innerHTML = optionsHtml;
+          getExchange();
+        });
+        ajaxRequest.addEventListener("error", () => {});
+        ajaxRequest.open("GET", "http:/localhost:3000/countries");
+        ajaxRequest.send();
+
+        //Funcion
+        function getExchange() {
+          // se extrae el currency del select
+          let curren = document.getElementById("countries").value;
+          let currency = curren.toLowerCase();
+
+          const ajaxRequest1 = new XMLHttpRequest(); //AJAX
+          ajaxRequest1.addEventListener("load", (e) => {
+            const currenciesList = JSON.parse(e.target.responseText);
+            const currencies = currenciesList[currency];
+
+            document.getElementById("dollarExchange").innerHTML =
+              currencies["usd"];
+            document.getElementById("euroExchange").innerHTML =
+              currencies["eur"];
+          });
+          ajaxRequest1.addEventListener("error", () => {});
+          ajaxRequest1.open(
+            "GET",
+            "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/" +
+              currency +
+              ".json"
+          );
+          ajaxRequest1.send();
+        }
+      </script>
+    </div>
+  </body>
+</html>
