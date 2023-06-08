@@ -1,119 +1,4 @@
 <!DOCTYPE html>
-<!-- <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Week 3 - Consume API</title>
-  <script>
-
-    const error = (e) => console.log(e.target.responseText);
-
-    function saveTask() {
-      const ajaxRequest = new XMLHttpRequest();
-      ajaxRequest.addEventListener("load", completed);
-      ajaxRequest.addEventListener("error", error);
-      ajaxRequest.open("POST", "http://localhost:3000/tasks");
-      ajaxRequest.setRequestHeader("Content-Type", "application/json");
-
-      const data = {
-        'title': document.getElementById('title').value,
-        'description': document.getElementById('description').value
-      };
-      ajaxRequest.send(JSON.stringify(data));
-    }
-
-    /**
-     * Generates an HTML table with tasks
-     */
-    function renderTasks(tasks) {
-      let html = "<table>";
-      tasks.forEach(task => {
-        html += `<tr><td>${task.title}</td><td><button onclick="get('${task._id}')"> Edit </button> </td></tr>`;
-      });
-      html += '</table>';
-
-      document.getElementById('tableList').innerHTML = html;
-    }
-
-    /**
-     * Generates an HTML table with tasks
-     */
-    function renderTask(task) {
-      let html = "<table>";
-      html += `<tr><td>${task.title}</td><td><button onclick="get('${task._id}')"> Edit </button> </td></tr>`;
-      html += '</table>';
-
-      document.getElementById('tableList').innerHTML = html;
-    }
-    /**
-     *  Get on or all
-     */
-    function get(id) {
-      let url = "http://localhost:3000/api/tasks";
-      if(id) {
-        url = `${url}?id=${id}`;
-      }
-      const ajaxRequest = new XMLHttpRequest();
-      ajaxRequest.addEventListener("load", (response) => {
-        const taskResponse = JSON.parse(response.target.responseText);
-        if(id){
-          renderTask(taskResponse);
-        } else {
-          renderTasks(taskResponse);
-        }
-      });
-      ajaxRequest.addEventListener("error", error);
-      ajaxRequest.open("GET", url);
-      ajaxRequest.setRequestHeader("Content-Type", "application/json");
-      ajaxRequest.send();
-    }
-
-    function saveTask() {
-      const ajaxRequest = new XMLHttpRequest();
-      ajaxRequest.addEventListener("load", completed);
-      ajaxRequest.addEventListener("error", error);
-      ajaxRequest.open("POST", "http://localhost:3000/tasks");
-      ajaxRequest.setRequestHeader("Content-Type", "application/json");
-
-      const data = {
-        'title': document.getElementById('title').value,
-        'description': document.getElementById('description').value
-      };
-      ajaxRequest.send(JSON.stringify(data));
-    }
-
-    get();
-  </script>
-</head>
-
-<body>
-  <div class="container">
-    <form>
-      <div class="form-group row">
-        <label for="inputName" class="col-sm-1-12 col-form-label">Title</label>
-        <div class="col-sm-1-12">
-          <input type="text" class="form-control" name="title" id="title" placeholder="">
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="inputName" class="col-sm-1-12 col-form-label">Description</label>
-        <div class="col-sm-1-12">
-          <input type="text" class="form-control" name="description" id="description" placeholder="">
-        </div>
-      </div>
-      <div class="form-group row">
-        <div class="offset-sm-2 col-sm-10">
-          <button type="button" class="btn btn-primary" id="saveButton" onclick="saveTask()">Save</button>
-        </div>
-      </div>
-    </form>
-
-    <div id="tableList"></div>
-  </div>
-</body>
-
-</html> -->
 
 <html>
   <head>
@@ -136,7 +21,6 @@
     <form id="courseForm">
       <label for="name">Nombre:</label>
       <input type="text" id="name" name="name" required /><br /><br />
-
       <label for="credits">Créditos:</label>
       <input type="number" id="credits" name="credits" required /><br /><br />
 
@@ -144,62 +28,71 @@
     </form>
 
     <script>
-function getCourses() {
-  const ajaxRequest = new XMLHttpRequest();
-  ajaxRequest.addEventListener("load", completed);
-  ajaxRequest.addEventListener("error", error);
-  ajaxRequest.open("GET", "http://localhost:3001/api/courses");
-  ajaxRequest.send();
-}
+      function getCourses() {
+        const ajaxRequest = new XMLHttpRequest();
+        ajaxRequest.addEventListener("load", completed);
+        ajaxRequest.addEventListener("error", error);
+        ajaxRequest.open("GET", "http://localhost:3001/api/courses");
+        ajaxRequest.send();
+      }
 
-function completed(event) {
-  const response = event.target.responseText;
-  const courses = JSON.parse(response);
+      function completed(event) {
+        const response = event.target.responseText;
+        const courses = JSON.parse(response);
 
-  const tableBody = document.querySelector("#coursesTable tbody");
-  tableBody.innerHTML = "";
+        const tableBody = document.querySelector("#coursesTable tbody");
+        tableBody.innerHTML = "";
 
-  courses.forEach((course) => {
-    const row = document.createElement("tr");
+        courses.forEach((course) => {
+          const row = document.createElement("tr");
 
-    const nameCell = document.createElement("td");
-    nameCell.textContent = course.name;
-    row.appendChild(nameCell);
 
-    const creditsCell = document.createElement("td");
-    creditsCell.textContent = course.credits;
-    row.appendChild(creditsCell);
+          const nameCell = document.createElement("td");
+          const nameInput = document.createElement("input");
+          nameInput.type = "text";
+          nameInput.value = course.name;
+          nameCell.appendChild(nameInput);
+          row.appendChild(nameCell);
 
-    const editDeleteCell = document.createElement("td");
-    const editButton = document.createElement("button");
-    editButton.textContent = "Editar";
-    editButton.addEventListener("click", () => {
-      // Lógica para editar el curso
-      console.log("Editar curso:", course);
-    });
-    editDeleteCell.appendChild(editButton);
+          const creditsCell = document.createElement("td");
+          const creditsInput = document.createElement("input");
+          creditsInput.type = "number";
+          creditsInput.value = course.credits;
+          creditsCell.appendChild(creditsInput);
+          row.appendChild(creditsCell);
 
-    const deleteButton = document.createElement("button");
-    deleteButton.textContent = "Eliminar";
-    deleteButton.addEventListener("click", () => {
-      deleteCourse(course._id);
-      console.log("Eliminar curso:", course);
-    });
-    editDeleteCell.appendChild(deleteButton);
+          const editDeleteCell = document.createElement("td");
+          const editButton = document.createElement("button");
+          editButton.textContent = "Editar";
+          editButton.addEventListener("click", () => {
+            // funcion editar:
+            editCourse(course._id,nameInput.value,creditsInput.value)
+            console.log("Editar curso:", course);
+          });
+          editDeleteCell.appendChild(editButton);
 
-    row.appendChild(editDeleteCell);
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "Eliminar";
+          deleteButton.addEventListener("click", () => {
+            //funcion para eliminar
+            deleteCourse(course._id);
+            console.log("Eliminar curso:", course);
+          });
+          editDeleteCell.appendChild(deleteButton);
 
-    tableBody.appendChild(row);
-  });
-}
+          row.appendChild(editDeleteCell);
 
-function error() {
-  console.error("Error al cargar los cursos");
-}
+          tableBody.appendChild(row);
+        });
+      }
 
-// Llama a la función getCourses al cargar la página
-getCourses();
+      function error() {
+        console.error("Error al cargar los cursos");
+      }
 
+      // Llama a la función getCourses al cargar la página
+      getCourses();
+      //Crear un curso
       document
         .getElementById("courseForm")
         .addEventListener("submit", function (event) {
@@ -233,22 +126,57 @@ getCourses();
 
       //eliminar curso:
       function deleteCourse(courseId) {
-  const ajaxRequest = new XMLHttpRequest();
-  ajaxRequest.addEventListener("load", deletionCompleted);
-  ajaxRequest.addEventListener("error", deletionError);
-  ajaxRequest.open("DELETE", `http://localhost:3001/api/courses?id=${courseId}`);
-  ajaxRequest.send();
-}
+        const ajaxRequest = new XMLHttpRequest();
+        ajaxRequest.addEventListener("load", deletionCompleted);
+        ajaxRequest.addEventListener("error", deletionError);
+        ajaxRequest.open(
+          "DELETE",
+          `http://localhost:3001/api/courses?id=${courseId}`
+        );
+        ajaxRequest.send();
+      }
 
-function deletionCompleted(event) {
-  console.log("Curso eliminado exitosamente");
-  getCourses();
-  // Actualizar la tabla o realizar cualquier otra acción necesaria después de eliminar el curso
-}
+      function deletionCompleted(event) {
+        console.log("Curso eliminado exitosamente");
+        getCourses();
+        // Actualizar la tabla o realizar cualquier otra acción necesaria después de eliminar el curso
+      }
 
-function deletionError() {
-  console.error("Error al eliminar el curso");
-}
+      function deletionError() {
+        console.error("Error al eliminar el curso");
+      }
+
+      //editar curso
+      function editCourse(courseId,name,credits) {
+        // Obtener los datos actualizados del curso, por ejemplo, mediante un formulario de edición
+
+        // Crear un objeto con los datos actualizados
+        const updatedCourse = {
+          id: courseId,
+          name: name,
+          credits: parseInt(credits),
+        };
+
+        const ajaxRequest = new XMLHttpRequest();
+        ajaxRequest.addEventListener("load", editCompleted);
+        ajaxRequest.addEventListener("error", editError);
+        ajaxRequest.open(
+          "PATCH",
+          `http://localhost:3001/api/courses?id=${courseId}`
+        );
+        ajaxRequest.setRequestHeader("Content-Type", "application/json");
+        ajaxRequest.send(JSON.stringify(updatedCourse));
+      }
+
+      function editCompleted(event) {
+        console.log("Curso editado exitosamente");
+        getCourses();
+        // Actualizar la tabla o realizar cualquier otra acción necesaria después de editar el curso
+      }
+
+      function editError() {
+        console.error("Error al editar el curso");
+      }
     </script>
   </body>
 </html>
