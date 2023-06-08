@@ -6,26 +6,35 @@
     <link rel="stylesheet" href="estilos.css" />
   </head>
   <body>
-    <table id="coursesTable">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Créditos</th>
-          <th>Editar/Eliminar</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <div class="principal">
+      <table id="coursesTable">
+        <thead>
+          <tr>
+            <th>Curso</th>
+            <th>Créditos</th>
+            <th>Teacher ID</th>
+            <th>Editar  /  Eliminar</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="secundario">
+        <h2>Crear Curso</h2>
+        <form id="courseForm">
+          <label for="name">Nombre:</label>
+          <input type="text" id="name" name="name" required /><br /><br />
+          <label for="credits">Créditos:</label>
+          <input
+            type="number"
+            id="credits"
+            name="credits"
+            required
+          /><br /><br />
 
-    <h2>Crear Curso</h2>
-    <form id="courseForm">
-      <label for="name">Nombre:</label>
-      <input type="text" id="name" name="name" required /><br /><br />
-      <label for="credits">Créditos:</label>
-      <input type="number" id="credits" name="credits" required /><br /><br />
-
-      <input type="submit" value="Crear Curso" />
-    </form>
+          <input type="submit" value="Crear Curso" />
+        </form>
+      </div>
+    </div>
 
     <script>
       function getCourses() {
@@ -46,11 +55,11 @@
         courses.forEach((course) => {
           const row = document.createElement("tr");
 
-
           const nameCell = document.createElement("td");
           const nameInput = document.createElement("input");
           nameInput.type = "text";
           nameInput.value = course.name;
+          nameInput.className = "input";
           nameCell.appendChild(nameInput);
           row.appendChild(nameCell);
 
@@ -58,15 +67,24 @@
           const creditsInput = document.createElement("input");
           creditsInput.type = "number";
           creditsInput.value = course.credits;
+          creditsInput.className = "input";
           creditsCell.appendChild(creditsInput);
           row.appendChild(creditsCell);
+
+          const teacherCell = document.createElement("td");
+          const teacherInput = document.createElement("input");
+          teacherInput.type = "text";
+          teacherInput.value = course.teacher;
+          teacherInput.className = "input";
+          teacherCell.appendChild(teacherInput);
+          row.appendChild(teacherCell);
 
           const editDeleteCell = document.createElement("td");
           const editButton = document.createElement("button");
           editButton.textContent = "Editar";
           editButton.addEventListener("click", () => {
             // funcion editar:
-            editCourse(course._id,nameInput.value,creditsInput.value)
+            editCourse(course._id, nameInput.value, creditsInput.value, teacherInput.value);
             console.log("Editar curso:", course);
           });
           editDeleteCell.appendChild(editButton);
@@ -117,7 +135,6 @@
       function completedPost() {
         alert("Curso creado exitosamente");
         getCourses();
-        // Puedes redirigir a otra página o hacer alguna otra acción después de crear el curso
       }
 
       function errorPost() {
@@ -139,7 +156,6 @@
       function deletionCompleted(event) {
         console.log("Curso eliminado exitosamente");
         getCourses();
-        // Actualizar la tabla o realizar cualquier otra acción necesaria después de eliminar el curso
       }
 
       function deletionError() {
@@ -147,14 +163,13 @@
       }
 
       //editar curso
-      function editCourse(courseId,name,credits) {
-        // Obtener los datos actualizados del curso, por ejemplo, mediante un formulario de edición
-
+      function editCourse(courseId, name, credits, teacher) {
         // Crear un objeto con los datos actualizados
         const updatedCourse = {
           id: courseId,
           name: name,
           credits: parseInt(credits),
+          teacher: teacher,
         };
 
         const ajaxRequest = new XMLHttpRequest();
@@ -171,7 +186,6 @@
       function editCompleted(event) {
         console.log("Curso editado exitosamente");
         getCourses();
-        // Actualizar la tabla o realizar cualquier otra acción necesaria después de editar el curso
       }
 
       function editError() {
