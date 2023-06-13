@@ -12,7 +12,7 @@
           <tr>
             <th>Curso</th>
             <th>Créditos</th>
-            <th>Teacher ID</th>
+            <!-- <th>Teacher ID</th> -->
             <th>Editar  /  Eliminar</th>
           </tr>
         </thead>
@@ -71,20 +71,21 @@
           creditsCell.appendChild(creditsInput);
           row.appendChild(creditsCell);
 
-          const teacherCell = document.createElement("td");
-          const teacherInput = document.createElement("input");
-          teacherInput.type = "text";
-          teacherInput.value = course.teacher;
-          teacherInput.className = "input";
-          teacherCell.appendChild(teacherInput);
-          row.appendChild(teacherCell);
+          // const teacherCell = document.createElement("td");
+          // const teacherInput = document.createElement("input");
+          // teacherInput.type = "text";
+          // teacherInput.value = course.teacher;
+          // teacherInput.className = "input";
+          // teacherInput.readOnly = true;
+          // teacherCell.appendChild(teacherInput);
+          // row.appendChild(teacherCell);
 
           const editDeleteCell = document.createElement("td");
           const editButton = document.createElement("button");
           editButton.textContent = "Editar";
           editButton.addEventListener("click", () => {
             // funcion editar:
-            editCourse(course._id, nameInput.value, creditsInput.value, teacherInput.value);
+            editCourse(course._id, nameInput.value, creditsInput.value);// teacherInput.value
             console.log("Editar curso:", course);
           });
           editDeleteCell.appendChild(editButton);
