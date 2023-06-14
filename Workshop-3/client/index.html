@@ -10,14 +10,26 @@
       <table id="coursesTable">
         <thead>
           <tr>
-            <th>Curso</th>
+            <th>
+              Curso
+              <div>
+                <select onchange="getCourses()" name="sort" id="sort">
+                  <option value="asc">Ordenar Ascendente</option>
+                  <option value="desc">Ordenar Descendente</option>
+                </select>
+              </div>
+            </th>
             <th>Créditos</th>
             <!-- <th>Teacher ID</th> -->
-            <th>Editar  /  Eliminar</th>
+            <th>Editar / Eliminar</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
+      <div>
+        <h2>Filtrar por curso:</h2>
+        <select onchange="getCourse()" name="selectCurso" id="selectCurso"></select>
+      </div>
       <div class="secundario">
         <h2>Crear Curso</h2>
         <form id="courseForm">
@@ -34,25 +46,30 @@
           <input type="submit" value="Crear Curso" />
         </form>
       </div>
+
+      <br />
     </div>
 
     <script>
-      function getCourses() {
+      function getCourse() {
         const ajaxRequest = new XMLHttpRequest();
-        ajaxRequest.addEventListener("load", completed);
-        ajaxRequest.addEventListener("error", error);
-        ajaxRequest.open("GET", "http://localhost:3001/api/courses");
+        ajaxRequest.addEventListener("load", completedC);
+        ajaxRequest.addEventListener("error", errorC);
+        const course = document.getElementById("selectCurso").value;
+        ajaxRequest.open(
+          "GET",
+          `http://localhost:3001/api/courses?id=${course}`
+        );
         ajaxRequest.send();
       }
 
-      function completed(event) {
+      function completedC(event) {
         const response = event.target.responseText;
-        const courses = JSON.parse(response);
+        const course = JSON.parse(response);
 
         const tableBody = document.querySelector("#coursesTable tbody");
         tableBody.innerHTML = "";
 
-        courses.forEach((course) => {
           const row = document.createElement("tr");
 
           const nameCell = document.createElement("td");
@@ -85,7 +102,89 @@
           editButton.textContent = "Editar";
           editButton.addEventListener("click", () => {
             // funcion editar:
-            editCourse(course._id, nameInput.value, creditsInput.value);// teacherInput.value
+            editCourse(course._id, nameInput.value, creditsInput.value); // teacherInput.value
+            console.log("Editar curso:", course);
+          });
+          editDeleteCell.appendChild(editButton);
+
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "Eliminar";
+          deleteButton.addEventListener("click", () => {
+            //funcion para eliminar
+            deleteCourse(course._id);
+            console.log("Eliminar curso:", course);
+          });
+          editDeleteCell.appendChild(deleteButton);
+
+          row.appendChild(editDeleteCell);
+
+          tableBody.appendChild(row);
+      }
+
+      function errorC() {
+        console.error("Error al cargar el curso");
+      }
+
+      function getCourses() {
+        const ajaxRequest = new XMLHttpRequest();
+        ajaxRequest.addEventListener("load", completed);
+        ajaxRequest.addEventListener("error", error);
+        const filter = document.getElementById("sort").value;
+        ajaxRequest.open(
+          "GET",
+          `http://localhost:3001/api/courses?sort=${filter}`
+        );
+        ajaxRequest.send();
+      }
+
+      function completed(event) {
+        const response = event.target.responseText;
+        const courses = JSON.parse(response);
+
+        const tableBody = document.querySelector("#coursesTable tbody");
+        tableBody.innerHTML = "";
+        const selectCurso = document.querySelector("#selectCurso");
+        selectCurso.innerHTML = "";
+
+        courses.forEach((course) => {
+          const option = document.createElement("option");
+          option.value = course._id;
+          option.text = course.name;
+          selectCurso.add(option);
+
+          const row = document.createElement("tr");
+
+          const nameCell = document.createElement("td");
+          const nameInput = document.createElement("input");
+          nameInput.type = "text";
+          nameInput.value = course.name;
+          nameInput.className = "input";
+          nameCell.appendChild(nameInput);
+          row.appendChild(nameCell);
+
+          const creditsCell = document.createElement("td");
+          const creditsInput = document.createElement("input");
+          creditsInput.type = "number";
+          creditsInput.value = course.credits;
+          creditsInput.className = "input";
+          creditsCell.appendChild(creditsInput);
+          row.appendChild(creditsCell);
+
+          // const teacherCell = document.createElement("td");
+          // const teacherInput = document.createElement("input");
+          // teacherInput.type = "text";
+          // teacherInput.value = course.teacher;
+          // teacherInput.className = "input";
+          // teacherInput.readOnly = true;
+          // teacherCell.appendChild(teacherInput);
+          // row.appendChild(teacherCell);
+
+          const editDeleteCell = document.createElement("td");
+          const editButton = document.createElement("button");
+          editButton.textContent = "Editar";
+          editButton.addEventListener("click", () => {
+            // funcion editar:
+            editCourse(course._id, nameInput.value, creditsInput.value); // teacherInput.value
             console.log("Editar curso:", course);
           });
           editDeleteCell.appendChild(editButton);
