@@ -1,0 +1,42 @@
+table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th, td {
+    border: 5px solid rgb(0, 0, 0);
+    padding: 8px;
+    text-align: left;
+  }
+
+  .input{
+    border-color: rgb(35, 21, 164);
+    background-color: rgb(7, 110, 119);
+    color: rgb(255, 255, 255);
+    text-align: center;
+    border: 3px solid black;
+    
+  }
+
+  .principal{
+    margin-top: 10rem;
+    background: rgb(116, 238, 250);
+    width: 55rem;
+    height: 40rem;
+    margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 20px;
+    border: solid 10px black;
+    overflow: auto;
+}
+
+button{
+  margin: 10px;
+}
+
+.secundario{
+  margin: 2rem;
+}
