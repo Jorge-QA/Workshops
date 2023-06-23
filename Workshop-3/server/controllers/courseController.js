@@ -34,8 +34,8 @@ const coursePost = async (req, res) => {
  */
 const courseGet = (req, res) => {
   // if an specific course is required
-  if (req.query && req.query.id) {
-    Course.findById(req.query.id)
+  if (req.query && req.query.name) {         // if (req.query && req.query.id) {  (traerlo por nombre)
+    Course.findOne({ name: req.query.name })  //   Course.findById(req.query.id)
       .then((course) => {
         res.json(course);
       })

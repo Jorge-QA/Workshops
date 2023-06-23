@@ -55,10 +55,11 @@
         const ajaxRequest = new XMLHttpRequest();
         ajaxRequest.addEventListener("load", completedC);
         ajaxRequest.addEventListener("error", errorC);
-        const course = document.getElementById("selectCurso").value;
+        const course = document.getElementById("selectCurso"); //.value
+        const option = course.options[course.selectedIndex].text; //para traer objeto por nombre
         ajaxRequest.open(
           "GET",
-          `http://localhost:3001/api/courses?id=${course}`
+          `http://localhost:3001/api/courses?name=${option}` //id=${course}
         );
         ajaxRequest.send();
       }
