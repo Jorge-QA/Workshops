@@ -76,4 +76,6 @@ app.use('/graphql', graphqlHTTP({
   graphiql: true,
 }));
 
+// http://localhost:3001/graphql    para abrir en navegador
+
 app.listen(3001, () => console.log(`Example app listening on port 3001!`))
