@@ -47,3 +47,10 @@ function login() {
   };
   ajaxRequest.send(JSON.stringify(data));
 }
+
+function redirectToTeachers(){
+  window.location.href = "teachers.html";
+}
+function redirectToCourses(){
+  window.location.href = "courses.html";
+}

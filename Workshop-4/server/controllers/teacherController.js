@@ -1,3 +1,4 @@
+const teacherModel = require("../models/teacherModel");
 const Teacher = require("../models/teacherModel");
 
 /**
@@ -47,30 +48,30 @@ const teacherPost = async (req, res) => {
  * @param {*} req
  * @param {*} res
  */
-const teacherGet = (req, res) => {
-  // if an specific teacher is required
-  if (req.query && req.query.id) {
-    Teacher.findById(req.query.id)
-      .then( (teacher) => {
-        res.json(teacher);
-      })
-      .catch(err => {
-        res.status(404);
-        console.log('error while queryting the teacher', err)
-        res.json({ error: "Teacher doesnt exist" })
-      });
-  } else {
-    // get all teachers
-    Teacher.find()
-      .then( teachers => {
-        res.json(teachers);
-      })
-      .catch(err => {
-        res.status(422);
-        res.json({ "error": err });
-      });
-  }
-};
+// const teacherGet = (req, res) => {
+//   // if an specific teacher is required
+//   if (req.query && req.query.id) {
+//     Teacher.findById(req.query.id)
+//       .then( (teacher) => {
+//         res.json(teacher);
+//       })
+//       .catch(err => {
+//         res.status(404);
+//         console.log('error while queryting the teacher', err)
+//         res.json({ error: "Teacher doesnt exist" })
+//       });
+//   } else {
+//     // get all teachers
+//     Teacher.find()
+//       .then( teachers => {
+//         res.json(teachers);
+//       })
+//       .catch(err => {
+//         res.status(422);
+//         res.json({ "error": err });
+//       });
+//   }
+// };
 
 /**
  * Updates a teacher
@@ -147,8 +148,24 @@ const teacherPatch = (req, res) => {
   }
 };
 
+/**
+ * Get all courses or one
+ *
+ * @param {*} req
+ * @param {*} res
+ */
+const teacherGet = (req, res) => {
+  return teacherModel.find((error, teachers) => {
+    if(error) {
+      console.log('there was an error', error);
+    }
+    return teachers;
+  }).populate('teacher').exec();
+};
+
+
 module.exports = {
-  teacherGet,
+  teacherGet,//anterior documentado para usar GraphQl
   teacherPost,
   teacherPatch,
   teacherDelete

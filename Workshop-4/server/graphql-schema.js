@@ -4,6 +4,7 @@ exports.graphQLschema = buildSchema(`
     courses: [Course]
     hello: String
     version: String
+    teachers: [Teacher]
   }
 
   type Course {

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses</title>
+</head>
+<body>
+    <h1>Lista de cursos con su profesor en JSon: </h1>
+    <pre id="result"></pre>
+</body>
+
+<script>
+ // Consulta GraphQL que deseas ejecutar
+ const query = `
+      {
+        courses {
+          name
+          credits
+          teacher{
+            _id
+            first_name
+            last_name
+            cedula
+            age
+          }
+        }
+      }
+    `;
+
+    // Configurar la URL del servidor GraphQL
+    const graphqlUrl = 'http://localhost:3001/graphql';
+
+    // Realizar la solicitud POST a la ruta "/graphql" con la consulta en el cuerpo
+    fetch(graphqlUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({ query }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Manejar la respuesta de GraphQL aquí
+      document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+      console.log(data);
+    })
+    .catch(error => {
+      // Manejar errores aquí
+      console.error('Error al consumir GraphQL:', error);
+    });
+  </script>
+</script>
+</html>

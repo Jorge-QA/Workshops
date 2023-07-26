@@ -1,45 +1,52 @@
-require('dotenv').config();
-const jwt = require('jsonwebtoken');
-const graphqlHTTP = require('express-graphql');
-const { graphQLschema } = require('./graphql-schema.js');
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
+//para utilizar GraphQl
+const graphqlHTTP = require("express-graphql");
+const { graphQLschema } = require("./graphql-schema.js");
 
-const express = require('express');
+const express = require("express");
 const app = express();
 // database connection
 const mongoose = require("mongoose");
 const db = mongoose.connect(process.env.DB_CONNECTION_STRING, {
   useNewUrlParser: true,
   useFindAndModify: false,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 });
 
 const theSecretKey = process.env.JWT_SECRET;
 
-const {
-   courseGet
-} = require("./controllers/courseController.js");
+const { courseGet } = require("./controllers/courseController.js");
 
 // parser for the request body (required for the POST and PUT methods)
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const courseModel = require('./models/courseModel.js');
-const teacherModel = require('./models/teacherModel.js');
+const courseModel = require("./models/courseModel.js");
+const teacherModel = require("./models/teacherModel.js");
+const { teacherGet } = require("./controllers/teacherController.js");
 
 // expose in the root element the different entry points of the
 // graphQL service
 const graphqlResolvers = {
   courses: courseGet,
-  hello: function() { return "Hola Mundo"},
-  version: function() {return "1.0"}
+  teachers: teacherGet, //
+  hello: function () {
+    return "Hola Mundo";
+  },
+  version: function () {
+    return "1.0";
+  },
 };
 
 // Middlewares
 app.use(bodyParser.json());
 // check for cors
-app.use(cors({
-  domains: '*',
-  methods: "*"
-}));
+app.use(
+  cors({
+    domains: "*",
+    methods: "*",
+  })
+);
 
 // JWT Authentication middleware
 // app.use(function (req, res, next) {
@@ -70,12 +77,16 @@ app.use(cors({
 //   }
 // });
 
-app.use('/graphql', graphqlHTTP({
-  schema: graphQLschema,
-  rootValue: graphqlResolvers,
-  graphiql: true,
-}));
+// para utilizar GraphQl
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema: graphQLschema,
+    rootValue: graphqlResolvers,
+    graphiql: true,
+  })
+);
 
-// http://localhost:3001/graphql    para abrir en navegador
+// http://localhost:3001/graphql    para abrir en navegador GraphiQl
 
-app.listen(3001, () => console.log(`Example app listening on port 3001!`))
+app.listen(3001, () => console.log(`Example app listening on port 3001!`));

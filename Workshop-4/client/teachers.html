@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teachers</title>
+  </head>
+  <body>
+    <h1>Lista de Profesores</h1>
+    <ul id="teacherList"></ul>
+    <h1>Lista de Profesores en JSon:</h1>
+    <pre id="result"></pre>
+  </body>
+  <script>
+    // Consulta GraphQL que deseas ejecutar
+    const query = `
+      {
+        teachers{
+             _id
+            first_name
+            last_name
+            cedula
+            age
+        }
+      }
+    `;
+
+    // Configurar la URL del servidor GraphQL
+    const graphqlUrl = "http://localhost:3001/graphql";
+
+    // Realizar la solicitud POST a la ruta "/graphql" con la consulta en el cuerpo
+    fetch(graphqlUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ query }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Manejar la respuesta de GraphQL aquí
+        const teacherList = data.data.teachers;
+
+        // Obtener la referencia al elemento ul donde mostraremos la lista de teachers
+        const ulElement = document.getElementById("teacherList");
+
+        // Recorrer los teachers y crear un elemento li para cada uno
+        teacherList.forEach((teacher) => {
+          const liElement = document.createElement("li");
+          liElement.textContent = teacher.first_name + " " + teacher.last_name;
+          ulElement.appendChild(liElement);
+        });
+        //Muestro toda la data de la respuesta en JSon:
+        document.getElementById("result").textContent = JSON.stringify(
+          data,
+          null,
+          2
+        );
+        console.log(data);
+      })
+      .catch((error) => {
+        // Manejar errores aquí
+        console.error("Error al consumir GraphQL:", error);
+      });
+  </script>
+</html>
